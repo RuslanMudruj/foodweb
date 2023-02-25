@@ -27,11 +27,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
     forms('form',modalTimerId);
-    cards();
+    try{
+        cards();
+    }
+    catch(e){
+        console.log(e);
+    }
 
     // Calculate
 
 
+    
 
     // Timer
 

@@ -1,4 +1,15 @@
-function slider({container,slide,nextButt,prevButt,totalCounter,currentCounter,wrapper,field}){
+import { enableScroll,disableScroll } from "../services/scrollControll";
+
+function slider({
+    container,
+    slide,
+    nextButt,
+    prevButt,
+    totalCounter,
+    currentCounter,
+    wrapper,
+    field
+}) {
     const slides = document.querySelectorAll(slide),
         slider = document.querySelector(container),
         prevButton = document.querySelector(prevButt),
@@ -7,7 +18,7 @@ function slider({container,slide,nextButt,prevButt,totalCounter,currentCounter,w
         totalSlides = document.querySelector(totalCounter),
         slidesWarappr = document.querySelector(wrapper),
         slidesInner = document.querySelector(field),
-    width = window.getComputedStyle(slidesWarappr).width;
+        width = window.getComputedStyle(slidesWarappr).width;
 
     totalSlides.textContent = '0' + slides.length;
     let curr = 0;
@@ -27,6 +38,7 @@ function slider({container,slide,nextButt,prevButt,totalCounter,currentCounter,w
 
         changeSlide(1);
 
+
     })
 
 
@@ -37,7 +49,17 @@ function slider({container,slide,nextButt,prevButt,totalCounter,currentCounter,w
         changeSlide(-1);
     })
 
+    slidesWarappr.addEventListener('wheel', (e) => {
+        disableScroll();
+        if (e.deltaY > 0)
+            changeSlide(-1);
+        else
+            changeSlide(1);
+    });
 
+    slidesWarappr.addEventListener('mouseleave', (e) => {
+        enableScroll();
+    })
 
     function changeSlide(i) {
         let widthInt = +width.slice(0, -2)
@@ -69,37 +91,38 @@ function slider({container,slide,nextButt,prevButt,totalCounter,currentCounter,w
 
     slider.append(idicators);
 
-    for( let i= 0;i<slides.length;i++){
+    for (let i = 0; i < slides.length; i++) {
         const dot = document.createElement('li');
         dot.classList.add('dot');
-        dot.setAttribute('data-slide-to',i);
-        
+        dot.setAttribute('data-slide-to', i);
+
         idicators.append(dot);
     }
 
     activateDot();
 
-    
+
     console.log(idicators.childNodes);
 
-    idicators.addEventListener('click',(e)=>{
-        if(e.target.classList.contains('dot')){
+    idicators.addEventListener('click', (e) => {
+        if (e.target.classList.contains('dot')) {
             changeSlide(e.target.getAttribute('data-slide-to') - curr)
         }
     })
 
-    function activateDot(){
-        idicators.childNodes.forEach(el=>{
+    function activateDot() {
+        idicators.childNodes.forEach(el => {
             console.log(el.getAttribute('data-slide-to'));
-            if(el.getAttribute('data-slide-to') == curr){
-                
+            if (el.getAttribute('data-slide-to') == curr) {
+
                 el.style.opacity = 1;
-            }
-            else{
+            } else {
                 el.style.opacity = 0.5;
             }
         })
     }
+
+   
 
 
 }
